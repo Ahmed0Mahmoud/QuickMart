@@ -37,6 +37,8 @@ dependencies:
   dots_indicator:
   shared_preferences:
   supabase_flutter: ^2.9.0
+  flutter_bloc: ^9.1.1
+  animated_snack_bar: ^0.4.0
 
 dev_dependencies:
   flutter_test:
