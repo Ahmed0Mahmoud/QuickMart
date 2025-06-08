@@ -28,9 +28,9 @@ class _LoginViewBodyState extends State<LoginViewBody> {
 
   @override
   void dispose(){
-    super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -40,7 +40,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
     if(state is LoginFailure){
       showAnimatedSnackbar(message: state.errMessage, type:AnimatedSnackBarType.error, context: context);
     }
-    else if (state is LoginSuccess){
+    else if (state is LoginSuccess || state is GoogleLoginSuccess){
       showAnimatedSnackbar(message: 'Success', type:AnimatedSnackBarType.success, context: context);
       Navigator.pushNamedAndRemoveUntil(context, MainView.routeName, (route) => false);
     }
@@ -90,18 +90,22 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                   onPressed: ()async{
                         if(_formKey.currentState!.validate()){
                           await context.read<AuthCubit>().login(email: _emailController.text, password: _passwordController.text);
+                          if (!mounted) return;
                         }
                         }, color: AppColors.cyan),
               const SizedBox(height: 20,),
               CustomButton(
-                  title: Row(
+                  title: state is GoogleLoginLoading ? CircularProgressIndicator() :  Row(
                     spacing: 8,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text('Login with Google',style:TextStyles.bold16.copyWith(color: Colors.white)),
                       Image.asset('assets/google.png'),
                        ],),
-                    onPressed: (){}, color: AppColors.grey50),
+                    onPressed: ()async{
+                    await context.read<AuthCubit>().googleSignIn();
+                    if (!mounted) return;
+                    }, color: AppColors.grey50),
             ],
           ),
         ),

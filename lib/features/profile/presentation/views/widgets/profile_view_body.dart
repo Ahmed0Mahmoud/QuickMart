@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:quick_mart/features/auth/presentation/views/login_view.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/app_text_styles.dart';
@@ -37,30 +39,41 @@ class ProfileViewBody extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(width: 80,),
-                    IconButton(padding: EdgeInsets.zero,onPressed: (){}, icon: Icon(Icons.logout,color: Colors.white,)),
+                    IconButton(padding: EdgeInsets.zero,
+                      splashColor: AppColors.grey150,
+                      onPressed: () async {
+                        try {
+                          await Supabase.instance.client.auth.signOut();
+
+                          if (context.mounted) {
+                            Navigator.pushReplacementNamed(context, LoginView.routeName);
+                          }
+                        } catch (e) {
+                          print('Logout error: $e');
+                          // Optionally show a SnackBar or AlertDialog
+                        }
+                      }, icon: Icon(Icons.logout,color: Colors.white,)),
                   ],
                 ),
               ),
               Positioned(
                 top: MediaQuery.of(context).size.height*0.28,
                 bottom: 0,
-                child: Expanded(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      color: AppColors.black,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15,vertical: 30),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Personal Information',style: TextStyles.bold19,),
-                          const SizedBox(height: 20,),
-                          Expanded(child: Text('Constructed with high-quality silicone material, the Loop Silicone Strong Magnetic Watch ensures a comfortable and secure fit on your wrist. The soft and flexible silicone is gentle on the skin, making it ideal for... Read more',maxLines: 5,overflow: TextOverflow.ellipsis,style: TextStyles.regular14.copyWith(color: AppColors.grey150),)),
-                        ],
-                      ),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    color: AppColors.black,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15,vertical: 30),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Personal Information',style: TextStyles.bold19,),
+                        const SizedBox(height: 20,),
+                        Expanded(child: Text('Constructed with high-quality silicone material, the Loop Silicone Strong Magnetic Watch ensures a comfortable and secure fit on your wrist. The soft and flexible silicone is gentle on the skin, making it ideal for... Read more',maxLines: 5,overflow: TextOverflow.ellipsis,style: TextStyles.regular14.copyWith(color: AppColors.grey150),)),
+                      ],
                     ),
                   ),
                 ),

@@ -30,17 +30,17 @@ class _SignupViewBodyState extends State<SignupViewBody> {
 
   @override
   void dispose(){
-    super.dispose();
     _nameController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
-    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthCubit, AuthState>(
   listener: (context, state) {
-    if(state is SignupSuccess){
+    if(state is SignupSuccess || state is GoogleLoginSuccess){
       showAnimatedSnackbar(context: context, message: 'success', type: AnimatedSnackBarType.success);
       Navigator.pushNamedAndRemoveUntil(context, MainView.routeName, (route) => false);
     }
@@ -85,18 +85,23 @@ class _SignupViewBodyState extends State<SignupViewBody> {
                   onPressed: ()async{
                   if(_formKey.currentState!.validate()){
                     await context.read<AuthCubit>().signup(name: _nameController.text, email: _emailController.text, password: _passwordController.text);
+                    if (!mounted) return;
                   }
                   }, color: AppColors.cyan),
               SizedBox(height: 20,),
               CustomButton(
-                  title: Row(
+                  title:state is GoogleLoginLoading ? CircularProgressIndicator() : Row(
                     spacing: 8,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text('Signup with Google',style:TextStyles.bold16.copyWith(color: Colors.white)),
                       Image.asset('assets/google.png'),
                     ],),
-                  onPressed: (){}, color: AppColors.grey50),
+                  onPressed: ()async{
+                    await context.read<AuthCubit>().googleSignIn();
+                    if (!mounted) return;
+                  },
+                  color: AppColors.grey50),
             ],
           ),
         ),
