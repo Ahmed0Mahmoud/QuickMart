@@ -42,7 +42,11 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => ProductDetailsView());
 
     case MainView.routeName :
-      return MaterialPageRoute(builder: (context) => MainView());
+      return MaterialPageRoute(builder: (context) =>
+          BlocProvider(
+            create: (context) => AuthCubit(),
+            child: MainView(),
+          ));
 
     case CartView.routeName :
       return MaterialPageRoute(builder: (context) => CartView());

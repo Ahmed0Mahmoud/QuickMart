@@ -24,6 +24,10 @@ final class GoogleLoginLoading extends AuthState {}
 final class GoogleLoginSuccess extends AuthState {}
 final class GoogleLoginFailure extends AuthState {}
 
+final class LogoutLoading extends AuthState {}
+final class LogoutSuccess extends AuthState {}
+final class LogoutFailure extends AuthState {}
+
 final class AddingUserDataLoading extends AuthState {}
 final class AddingUserDataSuccess extends AuthState {}
 final class AddingUserDataFailure extends AuthState {}
