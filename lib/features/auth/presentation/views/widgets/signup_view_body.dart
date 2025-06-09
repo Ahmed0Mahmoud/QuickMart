@@ -79,7 +79,7 @@ class _SignupViewBodyState extends State<SignupViewBody> {
               const SizedBox(height: 16,),
               CustomInputField(labelText: 'Email', hintText: 'ahmed@gmail.com',controller: _emailController,),
               const SizedBox(height: 16,),
-              CustomInputField(labelText: 'Password', hintText: 'Enter your password',suffixIcon: true,controller: _passwordController,),
+              CustomInputField(labelText: 'Password', hintText: 'Enter your password',suffixIcon: true,controller: _passwordController,obscureText: true,),
               SizedBox(height: 28,),
               CustomButton(title: state is SignupLoading ? CircularProgressIndicator() : Text("Create Account",style:TextStyles.bold16.copyWith(color: Colors.white),),
                   onPressed: ()async{

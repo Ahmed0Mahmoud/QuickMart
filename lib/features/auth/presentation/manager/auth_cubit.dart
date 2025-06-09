@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -29,6 +31,7 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       emit(SignupLoading());
       await client.auth.signUp(password: password,email: email,);
+      await addUserData(userName: name, email: email);
       emit(SignupSuccess());
     } on AuthException catch (e) {
       emit(SignupFailure(errMessage: e.message));
@@ -69,5 +72,22 @@ class AuthCubit extends Cubit<AuthState> {
       );
       emit(GoogleLoginSuccess());
       return response;
+    }
+
+
+    Future<void> addUserData({required String userName , required String email})async{
+    emit(AddingUserDataLoading());
+    try {
+      await client.from('users').insert({
+        "user_id" : client.auth.currentUser!.id,
+        "name" : userName,
+        "email" : email
+      });
+      emit(AddingUserDataSuccess());
+    } catch (e) {
+      log(e.toString());
+      emit(AddingUserDataFailure());
+    }
+
     }
 }

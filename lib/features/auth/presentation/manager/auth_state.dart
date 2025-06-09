@@ -23,3 +23,7 @@ final class SignupFailure extends AuthState {
 final class GoogleLoginLoading extends AuthState {}
 final class GoogleLoginSuccess extends AuthState {}
 final class GoogleLoginFailure extends AuthState {}
+
+final class AddingUserDataLoading extends AuthState {}
+final class AddingUserDataSuccess extends AuthState {}
+final class AddingUserDataFailure extends AuthState {}

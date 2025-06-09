@@ -73,7 +73,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
               const SizedBox(height: 32,),
               CustomInputField(labelText: 'Email', hintText: 'ahmed@gmail.com',controller: _emailController,),
               const SizedBox(height: 16,),
-              CustomInputField(labelText: 'Password', hintText: 'Enter your password',suffixIcon: true,controller: _passwordController,),
+              CustomInputField(labelText: 'Password', hintText: 'Enter your password',suffixIcon: true,controller: _passwordController,obscureText: true,),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 24),
                 child: Align(
