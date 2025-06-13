@@ -5,6 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../data/models/user_model.dart';
+
+
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
@@ -18,6 +21,7 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       emit(LoginLoading());
       await client.auth.signInWithPassword(password: password , email:  email);
+      await getUserData();
       emit(LoginSuccess());
     } on AuthException catch (e) {
       emit(LoginFailure(errMessage: e.message));
@@ -32,6 +36,7 @@ class AuthCubit extends Cubit<AuthState> {
       emit(SignupLoading());
       await client.auth.signUp(password: password,email: email,);
       await addUserData(userName: name, email: email);
+      await getUserData();
       emit(SignupSuccess());
     } on AuthException catch (e) {
       emit(SignupFailure(errMessage: e.message));
@@ -71,6 +76,7 @@ class AuthCubit extends Cubit<AuthState> {
         accessToken: accessToken,
       );
       await addUserData(userName: googleUser!.displayName!, email: googleUser!.email);
+      await getUserData();
       emit(GoogleLoginSuccess());
       return response;
     }
@@ -102,6 +108,32 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AddingUserDataFailure());
     }
 
+    }
+
+    Future getUserData()async{
+    emit(GetUserDataLoading());
+      try {
+        final userId = client.auth.currentUser?.id;
+        if(userId == null){
+          emit(GetUserDataFailure());
+          return;
+        }
+        final data = await client
+            .from('users')
+            .select().eq('user_id', userId) // column users in supabase
+            .single();
+
+        if (data.isEmpty) {
+          emit(GetUserDataFailure());
+          return;
+        }
+
+        final user = UserModel.fromJson(data);
+        emit(GetUserDataSuccess(model:user));
+      } catch (e) {
+        log('UserModel Parse Error: $e');
+        emit(GetUserDataFailure());
+      }
     }
 
 }

@@ -4,8 +4,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/app_text_styles.dart';
 import '../../../../auth/presentation/views/login_view.dart';
-class ProfileViewBody extends StatelessWidget {
+class ProfileViewBody extends StatefulWidget {
   const ProfileViewBody({super.key});
+
+  @override
+  State<ProfileViewBody> createState() => _ProfileViewBodyState();
+}
+
+class _ProfileViewBodyState extends State<ProfileViewBody> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<AuthCubit>().getUserData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +27,13 @@ class ProfileViewBody extends StatelessWidget {
     }
   },
   builder: (context, state) {
-    return Stack(
+    return  state is GetUserDataLoading ? Container(
+      color: Colors.black45,
+      child: const Center(
+        child: CircularProgressIndicator(),
+      ),
+    ) :
+    Stack(
       children: [
         Column(
           children: [
@@ -38,17 +55,29 @@ class ProfileViewBody extends StatelessWidget {
                           radius: 30,
                         ),
                         const SizedBox(width: 8,),
+                        state is GetUserDataSuccess ?
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            spacing: 2,
+                            children: [
+                              Text(state.model.name,style: TextStyles.semiBold16.copyWith(color: Colors.white)),
+                              Text(state.model.email,style: TextStyles.semiBold14.copyWith(color: Colors.white)),
+                            ],
+                          ),
+                        ):
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           spacing: 2,
                           children: [
-                            Text('Ahmed Mahmoud',style: TextStyles.semiBold16.copyWith(color: Colors.white)),
-                            Text('ahmed2523@gmail.com',style: TextStyles.semiBold14.copyWith(color: Colors.white)),
+                            Text("user name",style: TextStyles.semiBold16.copyWith(color: Colors.white)),
+                            Text('user email',style: TextStyles.semiBold14.copyWith(color: Colors.white)),
                           ],
                         ),
-                        const SizedBox(width: 80,),
-                        IconButton(padding: EdgeInsets.zero,
+                        IconButton(
+                            padding: EdgeInsets.zero,
                             splashColor: AppColors.grey150,
                             onPressed: () async {
                               await context.read<AuthCubit>().logout();

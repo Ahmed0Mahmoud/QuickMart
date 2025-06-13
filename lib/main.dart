@@ -11,8 +11,8 @@ import 'core/utils/app_colors.dart';
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(
-    url: 'your url',
-    anonKey: "your anon key"
+    url: 'https://eocietndxuzfadydowog.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVvY2lldG5keHV6ZmFkeWRvd29nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzMTI2NTAsImV4cCI6MjA2NDg4ODY1MH0.x06DlS9dEbe0BPHAeIB0rR7S6wYbQT8-VXzTGD6rgXs',
   );
   CacheHelper().init();
   Bloc.observer = MyObserver();

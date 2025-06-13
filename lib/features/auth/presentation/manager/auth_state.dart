@@ -31,3 +31,11 @@ final class LogoutFailure extends AuthState {}
 final class AddingUserDataLoading extends AuthState {}
 final class AddingUserDataSuccess extends AuthState {}
 final class AddingUserDataFailure extends AuthState {}
+
+final class GetUserDataLoading extends AuthState {}
+final class GetUserDataSuccess extends AuthState {
+  final UserModel model;
+
+  GetUserDataSuccess({required this.model});
+}
+final class GetUserDataFailure extends AuthState {}
