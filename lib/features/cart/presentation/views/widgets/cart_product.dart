@@ -5,9 +5,7 @@ import '../../../../../core/widgets/custom_counter.dart';
 import '../../../../../core/widgets/show_buttom_modal_sheet.dart';
 
 class CartProduct extends StatelessWidget {
-  const CartProduct({
-    super.key,
-  });
+  const CartProduct({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +21,10 @@ class CartProduct extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.18,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              image: DecorationImage(image: AssetImage('assets/Rectangle 9 (2).png'),fit: BoxFit.fill),
+              image: DecorationImage(
+                image: AssetImage('assets/Rectangle 9 (2).png'),
+                fit: BoxFit.fill,
+              ),
             ),
           ),
           Expanded(
@@ -33,17 +34,25 @@ class CartProduct extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Loop Silicone Strong Magnetic',style: TextStyles.medium15.copyWith(color: Colors.white),),
-                  Text('\$15.25',style: TextStyles.semiBold14.copyWith(color: Colors.white)),
+                  Text(
+                    'Loop Silicone Strong Magnetic',
+                    style: TextStyles.medium15.copyWith(color: Colors.white),
+                  ),
+                  Text(
+                    '\$15.25',
+                    style: TextStyles.semiBold14.copyWith(color: Colors.white),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CustomCounter(),
                       IconButton(
                         padding: EdgeInsets.zero,
-                        onPressed: (){
+                        onPressed: () {
                           showButtomModalSheet(context);
-                        }, icon: Image.asset('assets/trash.png'),),
+                        },
+                        icon: Image.asset('assets/trash.png'),
+                      ),
                     ],
                   ),
                 ],

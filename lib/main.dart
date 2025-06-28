@@ -9,12 +9,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'core/utils/app_colors.dart';
 
-void main()async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Supabase.initialize(
-    url: ProjectUrl,
-    anonKey: anonKey,
-  );
+  await Supabase.initialize(url: ProjectUrl, anonKey: anonKey);
   CacheHelper().init();
   Bloc.observer = MyObserver();
   runApp(const MyApp());
@@ -27,19 +24,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(
-        useMaterial3: true
-      ).copyWith(
+      theme: ThemeData.dark(useMaterial3: true).copyWith(
         scaffoldBackgroundColor: AppColors.black,
-        appBarTheme: AppBarTheme(
-            backgroundColor:AppColors.black,
-        )
+        appBarTheme: AppBarTheme(backgroundColor: AppColors.black),
       ),
       onGenerateRoute: onGenerateRoute,
       initialRoute: SplashView.routeName,
-
     );
   }
 }
-
-

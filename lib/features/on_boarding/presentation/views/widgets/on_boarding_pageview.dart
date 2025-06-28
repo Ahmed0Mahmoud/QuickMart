@@ -4,14 +4,12 @@ import 'package:quick_mart/features/on_boarding/presentation/views/widgets/page_
 class OnBoardingPageView extends StatelessWidget {
   final PageController controller;
 
-     const OnBoardingPageView({
-    super.key, required this.controller,
-  });
+  const OnBoardingPageView({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
     return PageView(
-      onPageChanged: (index){
+      onPageChanged: (index) {
         controller.page!.round();
       },
       controller: controller,
@@ -20,13 +18,15 @@ class OnBoardingPageView extends StatelessWidget {
         PageViewItem(
           image: "assets/01 Online Shopping 2.png",
           title: 'Explore a wide range of \nproducts',
-          subTitle: 'Explore a wide range of products at your fingertips. QuickMart offers an extensive collection to suit your needs.',
+          subTitle:
+              'Explore a wide range of products at your fingertips. QuickMart offers an extensive collection to suit your needs.',
           isVisible: true,
         ),
         PageViewItem(
           image: "assets/01 Online Shopping 5.png",
           title: 'Unlock exclusive offers \nand discounts',
-          subTitle: 'Get access to limited-time deals and special promotions available only to our valued customers.',
+          subTitle:
+              'Get access to limited-time deals and special promotions available only to our valued customers.',
           isVisible: false,
         ),
         // PageViewItem(

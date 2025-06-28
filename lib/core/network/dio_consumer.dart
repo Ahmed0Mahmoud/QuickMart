@@ -6,27 +6,23 @@ import 'package:quick_mart/core/sensetive_data.dart';
 
 import 'end_points.dart';
 
-
 class DioConsumer extends ApiConsumer {
   final Dio dio;
   DioConsumer({required this.dio}) {
     dio.interceptors.add(PrettyDioLogger(request: true, requestHeader: true));
     dio.options = BaseOptions(
       baseUrl: ApiEndpoints.baseUrl,
-      headers: {
-        "apikey" :anonKey,
-      },
+      headers: {"apikey": anonKey},
     );
-
   }
 
   @override
   Future<dynamic> get(
-      String path, {
-        data,
-        Map<String, dynamic>? queryParameters,
-        Options? options,
-      }) async {
+    String path, {
+    data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+  }) async {
     //final String? userToken = await token(); // Ensure token is awaited
     Response response = await dio.get(
       path,
@@ -51,7 +47,7 @@ class DioConsumer extends ApiConsumer {
       );
       return response.data;
     } on DioException catch (e) {
-     // handleDioExceptions(e);
+      // handleDioExceptions(e);
     }
   }
 

@@ -34,7 +34,7 @@ class _MainViewState extends State<MainView> {
         selectedLabelStyle: TextStyles.semiBold14,
         selectedItemColor: AppColors.white,
         unselectedLabelStyle: TextStyles.semiBold14,
-        unselectedItemColor:AppColors.grey150 ,
+        unselectedItemColor: AppColors.grey150,
         currentIndex: currentIndex,
         onTap: (index) {
           setState(() {
@@ -42,10 +42,32 @@ class _MainViewState extends State<MainView> {
           });
         },
         items: [
-           BottomNavigationBarItem(icon: Icon(currentIndex == 0 ? Icons.home : Icons.home_outlined), label: 'Home'),
-           BottomNavigationBarItem(icon: Icon(currentIndex == 1 ? Icons.shopping_cart :Icons.shopping_cart_outlined ), label: 'Cart'),
-           BottomNavigationBarItem(icon: Icon(currentIndex == 2 ? Icons.favorite : Icons.favorite_border_outlined ), label: 'Wishlist'),
-           BottomNavigationBarItem(icon: Icon(currentIndex == 3 ? Icons.person_2 : Icons.person_2_outlined ), label: 'Profile'),
+          BottomNavigationBarItem(
+            icon: Icon(currentIndex == 0 ? Icons.home : Icons.home_outlined),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              currentIndex == 1
+                  ? Icons.shopping_cart
+                  : Icons.shopping_cart_outlined,
+            ),
+            label: 'Cart',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              currentIndex == 2
+                  ? Icons.favorite
+                  : Icons.favorite_border_outlined,
+            ),
+            label: 'Wishlist',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              currentIndex == 3 ? Icons.person_2 : Icons.person_2_outlined,
+            ),
+            label: 'Profile',
+          ),
         ],
       ),
     );

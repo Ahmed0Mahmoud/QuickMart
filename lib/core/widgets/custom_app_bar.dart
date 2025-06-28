@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget {
   final bool searchIconVisible;
-  const CustomAppBar({
-    super.key, required this.searchIconVisible,
-  });
+  const CustomAppBar({super.key, required this.searchIconVisible});
 
   @override
   Widget build(BuildContext context) {

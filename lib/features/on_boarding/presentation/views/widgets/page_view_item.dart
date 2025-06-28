@@ -6,7 +6,6 @@ import 'package:quick_mart/core/utils/app_colors.dart';
 import '../../../../../core/utils/app_text_styles.dart';
 import '../../../../auth/presentation/views/login_view.dart';
 
-
 class PageViewItem extends StatelessWidget {
   final String image;
   final String title;
@@ -46,29 +45,32 @@ class PageViewItem extends StatelessWidget {
                       Image.asset('assets/quickmart (1).png'),
                       isVisible
                           ? TextButton(
-                        onPressed: () async {
-                          await CacheHelper().saveData(key: '${AppConstants().onBoardingShawed}', value: true);
-                          Navigator.pushReplacementNamed(context, LoginView.routeName);
-                        },
-                        child: Text(
-                          'Skip for now',
-                          style: TextStyles.regular14.copyWith(color: AppColors.cyan),
-                        ),
-                      )
+                            onPressed: () async {
+                              await CacheHelper().saveData(
+                                key: '${AppConstants().onBoardingShawed}',
+                                value: true,
+                              );
+                              Navigator.pushReplacementNamed(
+                                context,
+                                LoginView.routeName,
+                              );
+                            },
+                            child: Text(
+                              'Skip for now',
+                              style: TextStyles.regular14.copyWith(
+                                color: AppColors.cyan,
+                              ),
+                            ),
+                          )
                           : const SizedBox.shrink(),
                     ],
                   ),
                 ),
                 SizedBox(
                   height: size.height * 0.3,
-                  child: Image.asset(
-                    image,
-                    fit: BoxFit.contain,
-                  ),
+                  child: Image.asset(image, fit: BoxFit.contain),
                 ),
-                const SizedBox(
-                  height: 20,
-                )
+                const SizedBox(height: 20),
               ],
             ),
           ),

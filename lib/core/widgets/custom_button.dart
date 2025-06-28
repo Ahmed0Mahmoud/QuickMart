@@ -5,7 +5,10 @@ class CustomButton extends StatelessWidget {
   final void Function()? onPressed;
   final Color color;
   const CustomButton({
-    super.key, required this.title, required this.onPressed, required this.color,
+    super.key,
+    required this.title,
+    required this.onPressed,
+    required this.color,
   });
 
   @override
@@ -15,14 +18,11 @@ class CustomButton extends StatelessWidget {
       color: color,
       minWidth: double.infinity,
       height: 54,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
 
-      ),
+      child: title,
 
-      child: title
       // Text(title , style:TextStyles.bold16.copyWith(color: Colors.white),),
-
     );
   }
 }

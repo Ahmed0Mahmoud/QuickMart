@@ -3,13 +3,16 @@ import 'package:quick_mart/core/widgets/show_buttom_modal_sheet.dart';
 
 import '../../../../../core/utils/app_text_styles.dart';
 import '../../../../../core/widgets/custom_counter.dart';
+
 class WishlistViewBody extends StatelessWidget {
   const WishlistViewBody({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 60,bottom: 20),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+      ).copyWith(top: 60, bottom: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -25,7 +28,10 @@ class WishlistViewBody extends StatelessWidget {
                   height: MediaQuery.of(context).size.height * 0.18,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    image: DecorationImage(image: AssetImage('assets/Rectangle 9 (2).png'),fit: BoxFit.fill),
+                    image: DecorationImage(
+                      image: AssetImage('assets/Rectangle 9 (2).png'),
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
                 Expanded(
@@ -35,17 +41,29 @@ class WishlistViewBody extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Loop Silicone Strong Magnetic',style: TextStyles.medium15.copyWith(color: Colors.white),),
-                        Text('\$15.25',style: TextStyles.semiBold14.copyWith(color: Colors.white)),
+                        Text(
+                          'Loop Silicone Strong Magnetic',
+                          style: TextStyles.medium15.copyWith(
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          '\$15.25',
+                          style: TextStyles.semiBold14.copyWith(
+                            color: Colors.white,
+                          ),
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             CustomCounter(),
                             IconButton(
                               padding: EdgeInsets.zero,
-                              onPressed: (){
+                              onPressed: () {
                                 showButtomModalSheet(context);
-                              }, icon: Image.asset('assets/trash.png'),),
+                              },
+                              icon: Image.asset('assets/trash.png'),
+                            ),
                           ],
                         ),
                       ],

@@ -1,6 +1,7 @@
 class ApiEndpoints {
   static String baseUrl = 'https://eocietndxuzfadydowog.supabase.co/rest/v1/';
-
+  static String getAllProducts =
+      'products_table?select=*,favorite_table(*),purchase_table(*)';
 }
 
 // class ApiKeys {

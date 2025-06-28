@@ -1,4 +1,3 @@
-
- class AppConstants{
-   bool onBoardingShawed = false;
+class AppConstants {
+  bool onBoardingShawed = false;
 }
