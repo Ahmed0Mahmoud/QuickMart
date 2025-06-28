@@ -27,11 +27,8 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
     }
   },
   builder: (context, state) {
-    return  state is GetUserDataLoading ? Container(
-      color: Colors.black45,
-      child: const Center(
-        child: CircularProgressIndicator(),
-      ),
+    return  state is GetUserDataLoading ? const Center(
+      child: CircularProgressIndicator(),
     ) :
     Stack(
       children: [
