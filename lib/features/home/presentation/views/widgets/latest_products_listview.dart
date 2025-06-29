@@ -16,8 +16,8 @@ class LatestProductsGridView extends StatelessWidget {
         itemCount: products.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          crossAxisSpacing: 9,
-          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 7,
           childAspectRatio: 0.7,
         ),
         itemBuilder: (context, index) {

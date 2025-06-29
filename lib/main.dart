@@ -11,7 +11,7 @@ import 'core/utils/app_colors.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Supabase.initialize(url: ProjectUrl, anonKey: anonKey);
+  await Supabase.initialize(url: projectUrl, anonKey: anonKey);
   CacheHelper().init();
   Bloc.observer = MyObserver();
   runApp(const MyApp());

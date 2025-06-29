@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quick_mart/core/utils/app_colors.dart';
 import 'package:quick_mart/core/widgets/custom_button.dart';
 import 'package:quick_mart/features/home/presentation/views/widgets/favorites_button.dart';
+import 'package:quick_mart/features/home/presentation/views/widgets/rating_widget.dart';
 
 import '../../../../../core/utils/app_text_styles.dart';
 import '../../../data/models/product_model/product_model.dart';
@@ -22,7 +23,7 @@ class ProductDetailsViewBody extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * 0.38,
                 child: Image.network(
                   model.imageUrl!,
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                 ),
               ),
               Positioned(right: 16, top: 35, child: FavoriteButton(size: 28,)),
@@ -58,15 +59,16 @@ class ProductDetailsViewBody extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 20),
-                        Expanded(
-                          child: Text(
-                            model.description!,
-                            maxLines: 5,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyles.regular14.copyWith(
-                              color: AppColors.grey150,
-                            ),
+                        Text(
+                          model.description!,
+                          maxLines: 5,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyles.regular14.copyWith(
+                            color: AppColors.grey150,
                           ),
+                        ),
+                        Expanded(
+                            child: RatingWidget(),
                         ),
                         Row(
                           spacing: 20,

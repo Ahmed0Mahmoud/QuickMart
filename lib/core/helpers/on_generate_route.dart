@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quick_mart/core/network/dio_consumer.dart';
 import 'package:quick_mart/features/auth/presentation/manager/auth_cubit.dart';
 import 'package:quick_mart/features/cart/presentation/views/cart_view.dart';
+import 'package:quick_mart/features/home/data/models/category_model.dart';
 import 'package:quick_mart/features/home/presentation/manager/home_cubit.dart';
+import 'package:quick_mart/features/home/presentation/views/category_products_view.dart';
 import 'package:quick_mart/features/home/presentation/views/product_details_view.dart';
 import 'package:quick_mart/features/profile/presentation/views/profile_view.dart';
 import 'package:quick_mart/features/wishlist/presentation/views/wishlist_view.dart';
@@ -70,6 +72,13 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
 
     case ProfileView.routeName:
       return MaterialPageRoute(builder: (context) => ProfileView());
+
+    case CategoryProductsView.routeName:
+      final category = settings.arguments as CategoryModel ;
+      return MaterialPageRoute(builder: (context) => BlocProvider(
+  create: (context) => HomeCubit(DioConsumer(dio : Dio())),
+  child: CategoryProductsView(category: category,),
+));
 
     default:
       return MaterialPageRoute(builder: (context) => const Scaffold());

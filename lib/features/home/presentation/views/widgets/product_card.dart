@@ -17,7 +17,7 @@ class ProductCard extends StatelessWidget {
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
+        spacing: 5,
         children: [
           Stack(
             children: [
@@ -29,14 +29,13 @@ class ProductCard extends StatelessWidget {
                   color: Colors.red,
                   image:  DecorationImage(
                     image: NetworkImage(model.imageUrl!),
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fill,
                   ),
                 ),
               ),
               const Positioned(right: 6, top: 6, child: FavoriteButton(size: 20,)),
             ],
           ),
-          const SizedBox(height: 10),
           Text(
             model.productName!,
             style: TextStyles.medium14,

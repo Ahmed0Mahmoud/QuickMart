@@ -18,60 +18,60 @@ class HomeViewBody extends StatefulWidget {
 }
 
 class _HomeViewBodyState extends State<HomeViewBody> {
-
   @override
   void initState() {
     super.initState();
-    getProducts();
+    Future.microtask(() {
+      final cubit = context.read<HomeCubit>();
+      cubit.getAllProducts();
+    });
   }
 
-  void getProducts()async{
-    await context.read<HomeCubit>().getAllProducts();
-  }
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<HomeCubit, HomeState>(
       listener: (context, state) {
-        if (state is HomeFailure) {
+        if (state is GetAllProductsFailure) {
           showAnimatedSnackbar(
             context: context,
-            message: 'get data error',
+            message: 'Failed to load data',
             type: AnimatedSnackBarType.error,
           );
         }
       },
       builder: (context, state) {
-        final isLoading = state is HomeLoading;
-        final isError = state is HomeFailure;
-        final isSuccess = state is HomeSuccess;
+        if (state is GetAllProductsLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 20),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const CustomAppBar(searchIconVisible: true),
-                const OffersListView(),
-                const SizedBox(height: 34),
-                Text('Categories', style: TextStyles.bold19),
-                const SizedBox(height: 12),
-                const CategoriesListView(),
-                const SizedBox(height: 34),
-                Text('Latest Products', style: TextStyles.bold19),
-                const SizedBox(height: 12),
-                if (isLoading)
-                  const Center(child: CircularProgressIndicator()),
-                if (isSuccess)
-                  LatestProductsGridView(products: state.product),
-                if (isError)
-                  const Text('Failed to load products', style: TextStyle(color: Colors.red)),
-              ],
+        if (state is GetAllProductsSuccess) {
+          final products = state.product;
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 20),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const CustomAppBar(searchIconVisible: true),
+                  OffersListView(models: state.product,),
+                  const SizedBox(height: 34),
+                  Text('Categories', style: TextStyles.bold19),
+                  const SizedBox(height: 12),
+                  CategoriesListView(products: products),
+                  const SizedBox(height: 34),
+                  Text('Latest Products', style: TextStyles.bold19),
+                  const SizedBox(height: 12),
+                  products.isEmpty
+                      ? const Text('No products available')
+                      : LatestProductsGridView(products: products),
+                ],
+              ),
             ),
-          ),
-        );
+          );
+        }
+
+        return const SizedBox(); // fallback
       },
     );
   }
-
 }
