@@ -8,12 +8,14 @@ import 'package:quick_mart/features/splash/presentation/views/splash_view.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'core/utils/app_colors.dart';
+import 'core/utils/service_locator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(url: projectUrl, anonKey: anonKey);
   CacheHelper().init();
   Bloc.observer = MyObserver();
+  setupLocator();
   runApp(const MyApp());
 }
 

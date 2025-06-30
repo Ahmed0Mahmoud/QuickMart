@@ -20,15 +20,15 @@ class ProductDetailsViewBody extends StatelessWidget {
             children: [
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.38,
+                height: MediaQuery.of(context).size.height * 0.35,
                 child: Image.network(
                   model.imageUrl!,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                 ),
               ),
               Positioned(right: 16, top: 35, child: FavoriteButton(size: 28,)),
               Positioned(
-                top: MediaQuery.of(context).size.height * 0.33,
+                top: MediaQuery.of(context).size.height * 0.335,
                 bottom: 0,
                 child: Container(
                   width: MediaQuery.of(context).size.width,

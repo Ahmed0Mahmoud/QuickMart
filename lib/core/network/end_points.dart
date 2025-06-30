@@ -3,6 +3,8 @@ class ApiEndpoints {
   static String getAllProducts = 'products_table?select=*,favorite_table(*),purchase_table(*)';
 
   static String getCategoryProducts = 'products_table?select=*,favorite_table(*),purchase_table(*)';
+
+  static String getUserProductRate = 'rates_table?select=*';
 }
 
 // class ApiKeys {

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:quick_mart/features/home/data/models/product_model/product_model.dart';
-import 'package:quick_mart/features/home/presentation/views/product_details_view.dart';
 import 'offer_card.dart';
 
 class OffersListView extends StatefulWidget {

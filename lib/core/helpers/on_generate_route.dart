@@ -1,10 +1,9 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quick_mart/core/network/dio_consumer.dart';
+import 'package:quick_mart/core/utils/service_locator.dart';
 import 'package:quick_mart/features/auth/presentation/manager/auth_cubit.dart';
 import 'package:quick_mart/features/cart/presentation/views/cart_view.dart';
-import 'package:quick_mart/features/home/data/models/category_model.dart';
+import 'package:quick_mart/features/home/data/models/category_model/category_model.dart';
 import 'package:quick_mart/features/home/presentation/manager/home_cubit.dart';
 import 'package:quick_mart/features/home/presentation/views/category_products_view.dart';
 import 'package:quick_mart/features/home/presentation/views/product_details_view.dart';
@@ -31,7 +30,7 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder:
             (context) => BlocProvider(
-              create: (context) => AuthCubit(),
+              create: (context) => getIt.get<AuthCubit>(),
               child: LoginView(),
             ),
       );
@@ -40,7 +39,7 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder:
             (context) => BlocProvider(
-              create: (context) => AuthCubit(),
+              create: (context) => getIt.get<AuthCubit>(),
               child: SignupView(),
             ),
       );
@@ -57,8 +56,8 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
         builder:
             (context) => MultiBlocProvider(
               providers: [
-                BlocProvider(create:(context) => AuthCubit(),),
-                BlocProvider(create:(context) => HomeCubit(DioConsumer(dio: Dio())),),
+                BlocProvider.value(value: getIt.get<AuthCubit>()),
+                BlocProvider.value(value: getIt.get<HomeCubit>()),
               ],
               child: MainView(),
             ),
@@ -75,10 +74,10 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
 
     case CategoryProductsView.routeName:
       final category = settings.arguments as CategoryModel ;
-      return MaterialPageRoute(builder: (context) => BlocProvider(
-  create: (context) => HomeCubit(DioConsumer(dio : Dio())),
-  child: CategoryProductsView(category: category,),
-));
+      return MaterialPageRoute(builder: (context) => BlocProvider.value(
+        value: getIt.get<HomeCubit>(),
+        child: CategoryProductsView(category: category,),
+      ));
 
     default:
       return MaterialPageRoute(builder: (context) => const Scaffold());
