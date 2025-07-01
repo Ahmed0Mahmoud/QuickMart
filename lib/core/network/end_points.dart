@@ -1,10 +1,12 @@
 class ApiEndpoints {
   static String baseUrl = 'https://eocietndxuzfadydowog.supabase.co/rest/v1/';
-  static String getAllProducts = 'products_table?select=*,favorite_table(*),purchase_table(*)';
+  static String getAllProducts =
+      'products_table?select=*,favorite_table(*),purchase_table(*)';
 
-  static String getCategoryProducts = 'products_table?select=*,favorite_table(*),purchase_table(*)';
+  static String getCategoryProducts =
+      'products_table?select=*,favorite_table(*),purchase_table(*)';
 
-  static String getUserProductRate = 'rates_table?select=*';
+  static String getRates = 'rates_table?select=*';
 }
 
 // class ApiKeys {

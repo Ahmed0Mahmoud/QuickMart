@@ -25,7 +25,6 @@ class _OffersListViewState extends State<OffersListView> {
   void _startAutoScroll() {
     _autoScrollTimer = Timer.periodic(const Duration(seconds: 2), (timer) {
       if (scrollController.hasClients && widget.models.isNotEmpty) {
-
         double itemWidth = MediaQuery.of(context).size.width * 0.8;
 
         currentIndex++;

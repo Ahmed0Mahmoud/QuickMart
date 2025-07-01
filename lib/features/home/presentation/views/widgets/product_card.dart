@@ -13,7 +13,11 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, ProductDetailsView.routeName,arguments: model);
+        Navigator.pushNamed(
+          context,
+          ProductDetailsView.routeName,
+          arguments: model,
+        );
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,13 +31,17 @@ class ProductCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(24),
                   color: Colors.red,
-                  image:  DecorationImage(
+                  image: DecorationImage(
                     image: NetworkImage(model.imageUrl!),
                     fit: BoxFit.fill,
                   ),
                 ),
               ),
-              const Positioned(right: 6, top: 6, child: FavoriteButton(size: 20,)),
+              const Positioned(
+                right: 6,
+                top: 6,
+                child: FavoriteButton(size: 20),
+              ),
             ],
           ),
           Text(

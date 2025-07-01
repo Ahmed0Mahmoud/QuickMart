@@ -12,10 +12,15 @@ import 'core/utils/service_locator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Supabase.initialize(url: projectUrl, anonKey: anonKey);
-  CacheHelper().init();
+
+  await CacheHelper().init(); // ✅ Fix: added await
+
   Bloc.observer = MyObserver();
-  setupLocator();
+
+  setupLocator(); // ✅ Must come AFTER Supabase.init()
+
   runApp(const MyApp());
 }
 

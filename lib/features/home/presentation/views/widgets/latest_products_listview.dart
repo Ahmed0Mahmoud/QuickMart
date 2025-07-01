@@ -21,7 +21,7 @@ class LatestProductsGridView extends StatelessWidget {
           childAspectRatio: 0.7,
         ),
         itemBuilder: (context, index) {
-          return ProductCard(model: products[index],);
+          return ProductCard(model: products[index]);
         },
       ),
     );

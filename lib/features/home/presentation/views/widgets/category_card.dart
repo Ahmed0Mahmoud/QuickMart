@@ -4,7 +4,6 @@ import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/app_text_styles.dart';
 import '../../../data/models/category_model/category_model.dart';
 
-
 class CategoryCard extends StatelessWidget {
   final CategoryModel category;
 
@@ -13,13 +12,17 @@ class CategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        Navigator.pushNamed(context, CategoryProductsView.routeName , arguments:category );
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          CategoryProductsView.routeName,
+          arguments: category,
+        );
       },
       child: IntrinsicWidth(
         child: Container(
           alignment: Alignment.center,
-          width: MediaQuery.of(context).size.width*0.25,
+          width: MediaQuery.of(context).size.width * 0.25,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             color: category.backgroundColor,
@@ -37,8 +40,6 @@ class CategoryCard extends StatelessWidget {
     );
   }
 }
-
-
 
 final List<CategoryModel> categories = [
   CategoryModel(
@@ -62,4 +63,3 @@ final List<CategoryModel> categories = [
     backgroundColor: AppColors.blue,
   ),
 ];
-

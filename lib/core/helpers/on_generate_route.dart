@@ -4,7 +4,8 @@ import 'package:quick_mart/core/utils/service_locator.dart';
 import 'package:quick_mart/features/auth/presentation/manager/auth_cubit.dart';
 import 'package:quick_mart/features/cart/presentation/views/cart_view.dart';
 import 'package:quick_mart/features/home/data/models/category_model/category_model.dart';
-import 'package:quick_mart/features/home/presentation/manager/home_cubit.dart';
+import 'package:quick_mart/features/home/presentation/manager/home_cubit/home_cubit.dart';
+import 'package:quick_mart/features/home/presentation/manager/rate_comments_cubit/rate_cubit.dart';
 import 'package:quick_mart/features/home/presentation/views/category_products_view.dart';
 import 'package:quick_mart/features/home/presentation/views/product_details_view.dart';
 import 'package:quick_mart/features/profile/presentation/views/profile_view.dart';
@@ -49,7 +50,12 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
 
     case ProductDetailsView.routeName:
       final model = settings.arguments as ProductModel;
-      return MaterialPageRoute(builder: (context) => ProductDetailsView(model: model,));
+      return MaterialPageRoute(
+        builder: (context) => BlocProvider.value(
+        value: getIt.get<RateCommentsCubit>(),
+        child: ProductDetailsView(model: model),
+      ),
+      );
 
     case MainView.routeName:
       return MaterialPageRoute(
@@ -73,11 +79,14 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => ProfileView());
 
     case CategoryProductsView.routeName:
-      final category = settings.arguments as CategoryModel ;
-      return MaterialPageRoute(builder: (context) => BlocProvider.value(
-        value: getIt.get<HomeCubit>(),
-        child: CategoryProductsView(category: category,),
-      ));
+      final category = settings.arguments as CategoryModel;
+      return MaterialPageRoute(
+        builder:
+            (context) => BlocProvider.value(
+              value: getIt.get<HomeCubit>(),
+              child: CategoryProductsView(category: category),
+            ),
+      );
 
     default:
       return MaterialPageRoute(builder: (context) => const Scaffold());
