@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quick_mart/features/home/presentation/manager/rate_comments_cubit/rate_cubit.dart';
 import 'package:quick_mart/features/home/presentation/views/widgets/product_details_view_body.dart';
 
 import '../../data/models/product_model/product_model.dart';

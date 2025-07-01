@@ -7,6 +7,8 @@ class ApiEndpoints {
       'products_table?select=*,favorite_table(*),purchase_table(*)';
 
   static String getRates = 'rates_table?select=*';
+
+  static String postRate = 'rates_table?select=*';
 }
 
 // class ApiKeys {

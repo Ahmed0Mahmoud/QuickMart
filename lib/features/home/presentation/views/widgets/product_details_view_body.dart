@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quick_mart/core/utils/app_colors.dart';
 import 'package:quick_mart/core/widgets/custom_button.dart';
 import 'package:quick_mart/core/widgets/show_dialog.dart';
-import 'package:quick_mart/features/home/presentation/manager/rate_comments_cubit/rate_cubit.dart';
+import 'package:quick_mart/features/home/presentation/manager/ProductDetailsCubit/product_details_cubit.dart';
 import 'package:quick_mart/features/home/presentation/views/widgets/favorites_button.dart';
 import 'package:quick_mart/features/home/presentation/views/widgets/rating_widget.dart';
 
@@ -21,12 +21,12 @@ class ProductDetailsViewBody extends StatefulWidget {
 
 class _ProductDetailsViewBodyState extends State<ProductDetailsViewBody> {
 
-  late RateCommentsCubit _rateCommentsCubit;
+  late ProductDetailsCubit _productDetailsCubit;
 
   @override
   void initState() {
     super.initState();
-    _rateCommentsCubit = context.read<RateCommentsCubit>();
+    _productDetailsCubit = context.read<ProductDetailsCubit>();
     Future.microtask(loadRates);
   }
 
@@ -36,13 +36,13 @@ class _ProductDetailsViewBodyState extends State<ProductDetailsViewBody> {
   }
 
   void loadRates() async {
-    _rateCommentsCubit.clearRates();
-    await _rateCommentsCubit.getRates(productId: widget.model.productId!);
+    _productDetailsCubit.clearRates();
+    await _productDetailsCubit.getRates(productId: widget.model.productId!);
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RateCommentsCubit, RateCommentsState>(
+    return BlocConsumer<ProductDetailsCubit, ProductDetailsState>(
       listener: (context, state) {
         if (state is GetRateFailure) {
           showAnimatedSnackbar(
@@ -107,8 +107,8 @@ class _ProductDetailsViewBodyState extends State<ProductDetailsViewBody> {
                             Expanded(
                               child: state is GetRateSuccess
                                   ? RatingWidget(
-                                averageRate: _rateCommentsCubit.averageRate,
-                                userRate: _rateCommentsCubit.userRate.toDouble(),
+                                averageRate: _productDetailsCubit.averageRate,
+                                userRate: _productDetailsCubit.userRate.toDouble(),
                               )
                                   : state is GetRateFailure
                                   ? Center(

@@ -5,7 +5,6 @@ import 'package:quick_mart/features/auth/presentation/manager/auth_cubit.dart';
 import 'package:quick_mart/features/cart/presentation/views/cart_view.dart';
 import 'package:quick_mart/features/home/data/models/category_model/category_model.dart';
 import 'package:quick_mart/features/home/presentation/manager/home_cubit/home_cubit.dart';
-import 'package:quick_mart/features/home/presentation/manager/rate_comments_cubit/rate_cubit.dart';
 import 'package:quick_mart/features/home/presentation/views/category_products_view.dart';
 import 'package:quick_mart/features/home/presentation/views/product_details_view.dart';
 import 'package:quick_mart/features/profile/presentation/views/profile_view.dart';
@@ -14,6 +13,7 @@ import 'package:quick_mart/features/wishlist/presentation/views/wishlist_view.da
 import '../../features/auth/presentation/views/login_view.dart';
 import '../../features/auth/presentation/views/signup_view.dart';
 import '../../features/home/data/models/product_model/product_model.dart';
+import '../../features/home/presentation/manager/ProductDetailsCubit/product_details_cubit.dart';
 import '../../features/home/presentation/views/home_view.dart';
 import '../../features/home/presentation/views/main_view.dart';
 import '../../features/on_boarding/presentation/views/on_boarding_view.dart';
@@ -52,7 +52,7 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       final model = settings.arguments as ProductModel;
       return MaterialPageRoute(
         builder: (context) => BlocProvider.value(
-        value: getIt.get<RateCommentsCubit>(),
+        value: getIt.get<ProductDetailsCubit>(),
         child: ProductDetailsView(model: model),
       ),
       );
