@@ -10,6 +10,7 @@ void showAnimatedSnackbar({
     message,
     type: type,
     mobileSnackBarPosition: MobileSnackBarPosition.bottom,
-    duration: const Duration(seconds: 3),
+    duration: const Duration(seconds: 1),
   ).show(context);
 }
+

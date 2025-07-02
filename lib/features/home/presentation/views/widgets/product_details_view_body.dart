@@ -39,133 +39,151 @@ class _ProductDetailsViewBodyState extends State<ProductDetailsViewBody> {
     _productDetailsCubit.clearRates();
     await _productDetailsCubit.getRates(productId: widget.model.productId!);
   }
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  // }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ProductDetailsCubit, ProductDetailsState>(
       listener: (context, state) {
-        if (state is GetRateFailure) {
-          showAnimatedSnackbar(
+         if (state is PostRateSuccess){
+          if (context.mounted) {
+            showAnimatedSnackbar(
               context: context,
-              message: 'failed to load rates',
-              type: AnimatedSnackBarType.error);
+              message: 'Thanks for rating!',
+              type: AnimatedSnackBarType.success,
+            );
+          }
+        }
+
+        else if (state is PostRateFailure) {
+          if (context.mounted) {
+            showAnimatedSnackbar(
+              context: context,
+              message: 'Failed to submit rating',
+              type: AnimatedSnackBarType.error,
+            );
+          }
         }
       },
-      builder: (context, state) {
-        return Column(
-          children: [
-            Expanded(
-              child: Stack(
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.35,
-                    child: Image.network(widget.model.imageUrl!,
-                        fit: BoxFit.fill),
-                  ),
-                  Positioned(right: 16, top: 35, child: FavoriteButton(size: 28)),
-                  Positioned(
-                    top: MediaQuery.of(context).size.height * 0.335,
-                    bottom: 0,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: AppColors.black,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 30),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    widget.model.productName!,
-                                    maxLines: 2,
-                                    style: TextStyles.bold19,
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                Text('\$${widget.model.price}',
-                                    style: TextStyles.bold19),
-                              ],
-                            ),
-                            const SizedBox(height: 20),
-                            Text(
-                              widget.model.description!,
-                              maxLines: 5,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyles.regular14.copyWith(
-                                color: AppColors.grey150,
-                              ),
-                            ),
-                            Expanded(
-                              child: state is GetRateSuccess
-                                  ? RatingWidget(
-                                averageRate: _productDetailsCubit.averageRate,
-                                userRate: _productDetailsCubit.userRate.toDouble(),
-                              )
-                                  : state is GetRateFailure
-                                  ? Center(
-                                child: Text('faild to load rates'),
-                              )
-                                  : const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            ),
+        builder: (context, state) {
+          final isLoading = state is GetRateLoading ;
+          final isSuccess = state is GetRateSuccess || state is PostRateSuccess;
 
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround, // Changed for better spacing
-                              children: [
-                                Expanded(
-                                  child: CustomButton(
-                                    title: Text(
-                                      'Buy Now',
-                                      style: TextStyles.semiBold16.copyWith(
-                                        color: AppColors.cyan,
+          return isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : Column(
+            children: [
+              Expanded(
+                child: Stack(
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height * 0.35,
+                      child: Image.network(widget.model.imageUrl!,
+                          fit: BoxFit.fill),
+                    ),
+                    const Positioned(
+                        right: 16, top: 35, child: FavoriteButton(size: 28)),
+                    Positioned(
+                      top: MediaQuery.of(context).size.height * 0.335,
+                      bottom: 0,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: AppColors.black,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 30),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      widget.model.productName!,
+                                      maxLines: 2,
+                                      style: TextStyles.bold19,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Text('\$${widget.model.price}',
+                                      style: TextStyles.bold19),
+                                ],
+                              ),
+                              const SizedBox(height: 20),
+                              Text(
+                                widget.model.description!,
+                                maxLines: 5,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyles.regular14
+                                    .copyWith(color: AppColors.grey150),
+                              ),
+                              const SizedBox(height: 20),
+                              isSuccess
+                                  ? RatingWidget(
+                                averageRate:
+                                _productDetailsCubit.averageRate,
+                                userRate: _productDetailsCubit.userRate
+                                    .toDouble(),
+                                productId: widget.model.productId!,
+                              )
+                                  : Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceAround,
+                                children: [
+                                  Expanded(
+                                    child: CustomButton(
+                                      title: Text(
+                                        'Buy Now',
+                                        style: TextStyles.semiBold16
+                                            .copyWith(
+                                            color: AppColors.cyan),
                                       ),
+                                      onPressed: () {},
+                                      color: AppColors.grey50,
                                     ),
-                                    onPressed: () {},
-                                    color: AppColors.grey50,
                                   ),
-                                ),
-                                const SizedBox(width: 20), // Add spacing between buttons
-                                Expanded(
-                                  child: CustomButton(
-                                    title: Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.center,
-                                      children: [ // Use children directly with Row
-                                        Text(
-                                          'Add To Cart',
-                                          style: TextStyles.semiBold16,
-                                        ),
-                                        const SizedBox(width: 8), // Spacing between text and icon
-                                        Image.asset('assets/shopping-cart (1).png'),
-                                      ],
+                                  const SizedBox(width: 20),
+                                  Expanded(
+                                    child: CustomButton(
+                                      title: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'Add To Cart',
+                                            style: TextStyles.semiBold16,
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Image.asset(
+                                              'assets/shopping-cart (1).png'),
+                                        ],
+                                      ),
+                                      onPressed: () {},
+                                      color: AppColors.cyan,
                                     ),
-                                    onPressed: () {},
-                                    color: AppColors.cyan,
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
-        );
-      },
+            ],
+          );
+        }
     );
   }
 }
