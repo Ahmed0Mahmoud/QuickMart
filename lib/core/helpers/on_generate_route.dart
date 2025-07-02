@@ -51,10 +51,13 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case ProductDetailsView.routeName:
       final model = settings.arguments as ProductModel;
       return MaterialPageRoute(
-        builder: (context) => BlocProvider.value(
-        value: getIt.get<ProductDetailsCubit>(),
-        child: ProductDetailsView(model: model),
-      ),
+        builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: getIt.get<ProductDetailsCubit>()),
+              BlocProvider.value(value: getIt.get<AuthCubit>()),
+            ],
+            child: ProductDetailsView(model: model),
+        ),
       );
 
     case MainView.routeName:

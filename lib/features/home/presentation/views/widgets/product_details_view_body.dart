@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quick_mart/core/utils/app_colors.dart';
 import 'package:quick_mart/core/widgets/custom_button.dart';
 import 'package:quick_mart/core/widgets/show_dialog.dart';
+import 'package:quick_mart/features/auth/presentation/manager/auth_cubit.dart';
 import 'package:quick_mart/features/home/presentation/manager/ProductDetailsCubit/product_details_cubit.dart';
 import 'package:quick_mart/features/home/presentation/views/widgets/commentInputField.dart';
 import 'package:quick_mart/features/home/presentation/views/widgets/favorites_button.dart';
@@ -25,16 +26,26 @@ class _ProductDetailsViewBodyState extends State<ProductDetailsViewBody> {
 
   late ProductDetailsCubit _productDetailsCubit;
 
+  late AuthCubit _authCubit;
+
+
+
   final _controller =TextEditingController();
+
+
 
   @override
   void initState() {
     super.initState();
     _productDetailsCubit = context.read<ProductDetailsCubit>();
+    _authCubit = context.read<AuthCubit>();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       loadRates();
+      getUserData();
     });
   }
+
+
 
   @override
   void dispose() {
@@ -45,6 +56,10 @@ class _ProductDetailsViewBodyState extends State<ProductDetailsViewBody> {
   void loadRates() async {
     _productDetailsCubit.clearRates();
     await _productDetailsCubit.getRates(productId: widget.model.productId!);
+  }
+
+  void getUserData() async {
+    await _authCubit.getUserData();
   }
   // @override
   // void didChangeDependencies() {
@@ -155,7 +170,8 @@ class _ProductDetailsViewBodyState extends State<ProductDetailsViewBody> {
                                           if(_controller.text.trim().isEmpty) return;
                                           await _productDetailsCubit.addComment(
                                               comment: _controller.text,
-                                              productId: widget.model.productId!
+                                              productId: widget.model.productId!,
+                                              userName: _authCubit.userModel.name
                                           );
                                           _controller.clear();
                                         },
@@ -164,7 +180,7 @@ class _ProductDetailsViewBodyState extends State<ProductDetailsViewBody> {
                                     padding:  EdgeInsets.symmetric(vertical: 15),
                                     child:  Text("comments",style: TextStyles.semiBold18,),
                                   ),
-                                  CommentsListView(),
+                                  CommentsListView(model: widget.model,),
 
 
                                 ],

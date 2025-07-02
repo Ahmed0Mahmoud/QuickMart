@@ -13,6 +13,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   SupabaseClient client = Supabase.instance.client;
 
+
   Future<void> login({required String email, required String password}) async {
     try {
       emit(LoginLoading());
@@ -111,7 +112,9 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future getUserData() async {
+    UserModel userModel = UserModel(name: 'non', email: 'non') ;
+
+   Future<void> getUserData() async {
     emit(GetUserDataLoading());
     try {
       final userId = client.auth.currentUser?.id;
@@ -131,11 +134,16 @@ class AuthCubit extends Cubit<AuthState> {
         return;
       }
 
-      final user = UserModel.fromJson(data);
-      emit(GetUserDataSuccess(model: user));
+     //  final user = UserModel.fromJson(data);
+        userModel = UserModel.fromJson(data);
+
+      emit(GetUserDataSuccess(model: userModel));
     } catch (e) {
       log('UserModel Parse Error: $e');
       emit(GetUserDataFailure());
     }
   }
+
+
+
 }
