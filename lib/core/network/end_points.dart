@@ -9,6 +9,8 @@ class ApiEndpoints {
   static String getRates = 'rates_table?select=*';
 
   static String postRate = 'rates_table?select=*';
+
+  static String addComment = 'comments_table';
 }
 
 // class ApiKeys {
