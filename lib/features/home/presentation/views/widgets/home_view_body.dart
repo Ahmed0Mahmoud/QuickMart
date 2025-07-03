@@ -51,7 +51,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
             MaterialPageRoute(
               builder: (_) => SearchView(products: state.products),
             ),
-          ).then((_){
+          ).then((_) {
             context.read<HomeCubit>()
               ..clearCache()
               ..getAllProducts();
@@ -63,10 +63,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
             type: AnimatedSnackBarType.error,
           );
         }
-
       },
       builder: (context, state) {
-        if (state is GetAllProductsLoading || state is SearchProductsLoading)  {
+        if (state is GetAllProductsLoading || state is SearchProductsLoading) {
           return const Center(child: CircularProgressIndicator());
         }
 
@@ -80,19 +79,19 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                    CustomAppBar(
+                  CustomAppBar(
                     searchIconVisible: true,
                     hintText: 'Search here...',
                     isDense: false,
                     controller: _searchController,
-                    onPressed: () async{
-                        final searchText = _searchController.text.trim();
-                        if (searchText.isNotEmpty) {
-                          await context.read<HomeCubit>().searchProduct(
-                              productName: searchText
-                          );
-                          _searchController.clear();
-                        }
+                    onPressed: () async {
+                      final searchText = _searchController.text.trim();
+                      if (searchText.isNotEmpty) {
+                        await context.read<HomeCubit>().searchProduct(
+                          productName: searchText,
+                        );
+                        _searchController.clear();
+                      }
                     },
                   ),
                   OffersListView(models: state.product),

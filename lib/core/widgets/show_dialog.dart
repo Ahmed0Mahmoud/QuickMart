@@ -13,4 +13,3 @@ void showAnimatedSnackbar({
     duration: const Duration(seconds: 1),
   ).show(context);
 }
-

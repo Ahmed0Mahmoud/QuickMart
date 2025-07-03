@@ -23,15 +23,13 @@ class ProductDetailsViewBody extends StatefulWidget {
 }
 
 class _ProductDetailsViewBodyState extends State<ProductDetailsViewBody> {
-
   late ProductDetailsCubit _productDetailsCubit;
+
 
   late AuthCubit _authCubit;
 
 
-
-  final _controller =TextEditingController();
-
+  final _controller = TextEditingController();
 
 
   @override
@@ -42,10 +40,9 @@ class _ProductDetailsViewBodyState extends State<ProductDetailsViewBody> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       loadRates();
       getUserData();
+      getFavorites();
     });
   }
-
-
 
   @override
   void dispose() {
@@ -61,6 +58,12 @@ class _ProductDetailsViewBodyState extends State<ProductDetailsViewBody> {
   void getUserData() async {
     await _authCubit.getUserData();
   }
+
+   getFavorites() {
+    return _productDetailsCubit.loadFavoritesFromCache();
+  }
+
+
   // @override
   // void didChangeDependencies() {
   //   super.didChangeDependencies();
@@ -70,7 +73,7 @@ class _ProductDetailsViewBodyState extends State<ProductDetailsViewBody> {
   Widget build(BuildContext context) {
     return BlocConsumer<ProductDetailsCubit, ProductDetailsState>(
       listener: (context, state) {
-         if (state is PostRateSuccess){
+        if (state is PostRateSuccess) {
           if (context.mounted) {
             showAnimatedSnackbar(
               context: context,
@@ -78,9 +81,7 @@ class _ProductDetailsViewBodyState extends State<ProductDetailsViewBody> {
               type: AnimatedSnackBarType.success,
             );
           }
-        }
-
-        else if (state is PostRateFailure) {
+        } else if (state is PostRateFailure) {
           if (context.mounted) {
             showAnimatedSnackbar(
               context: context,
@@ -90,154 +91,171 @@ class _ProductDetailsViewBodyState extends State<ProductDetailsViewBody> {
           }
         }
       },
-        builder: (context, state) {
-          final isLoading = state is GetRateLoading ;
-          final isSuccess = state is GetRateSuccess || state is PostRateSuccess;
+      builder: (context, state) {
+        final isLoading = state is GetRateLoading;
+        final isSuccess = state is GetRateSuccess || state is PostRateSuccess;
 
-          return isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : Column(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      physics: BouncingScrollPhysics(),
-                      child: Column(
-                        children: [
-                            Stack(
-                              children: [
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: MediaQuery.of(context).size.height * 0.35,
-                                  child: Image.network(widget.model.imageUrl!,
-                                      fit: BoxFit.fill),
-                                ),
-                                const Positioned(
-                                    right: 16, top: 35, child: FavoriteButton(size: 28)),
-                              ],
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 15, vertical: 30),
+        return isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
+                    child: Column(
+                      children: [
+                        Stack(
+                          children: [
+                            SizedBox(
                               width: MediaQuery.of(context).size.width,
-                              decoration: BoxDecoration(
-                                color: AppColors.black,
+                              height: MediaQuery.of(context).size.height * 0.35,
+                              child: Image.network(
+                                widget.model.imageUrl!,
+                                fit: BoxFit.fill,
                               ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
+                            ),
+                            Positioned(
+                              right: 16,
+                              top: 35,
+                              child: FavoriteButton(
+                                size: 28,
+                                color: _productDetailsCubit.isFavorite(widget.model.productId!) ? Colors.red : Colors.grey,
+                                onTap: () async {
+                                  await _productDetailsCubit
+                                      .setFavorite(
+                                        productId: widget.model.productId!,
+                                      );
+                                    _productDetailsCubit.isFavorite(widget.model.productId!);
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 15,
+                            vertical: 30,
+                          ),
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(color: AppColors.black),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          widget.model.productName!,
-                                          maxLines: 2,
-                                          style: TextStyles.bold19,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Text('\$${widget.model.price}',
-                                          style: TextStyles.bold19),
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 15),
+                                children: [
+                                  Expanded(
                                     child: Text(
-                                      widget.model.description!,
-                                      maxLines: 5,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyles.regular14
-                                          .copyWith(color: AppColors.grey150),
+                                      widget.model.productName!,
+                                      maxLines: 2,
+                                      style: TextStyles.bold19,
                                     ),
                                   ),
-
-                                  isSuccess
-                                      ? RatingWidget(
-                                    averageRate:
-                                    _productDetailsCubit.averageRate,
-                                    userRate: _productDetailsCubit.userRate
-                                        .toDouble(),
-                                    productId: widget.model.productId!,
-                                  )
-                                      : SizedBox(),
-
-                                  state is AddCommentLoading ? Center(child: CircularProgressIndicator())
-                                      :CommentInputField(
-                                        controller: _controller,
-                                        hintText: 'Type your feedback',
-                                        onPressed: () async{
-                                          if(_controller.text.trim().isEmpty) return;
-                                          await _productDetailsCubit.addComment(
-                                              comment: _controller.text,
-                                              productId: widget.model.productId!,
-                                              userName: _authCubit.userModel.name
-                                          );
-                                          _controller.clear();
-                                        },
+                                  const SizedBox(width: 10),
+                                  Text(
+                                    '\$${widget.model.price}',
+                                    style: TextStyles.bold19,
                                   ),
-                                  const Padding(
-                                    padding:  EdgeInsets.symmetric(vertical: 15),
-                                    child:  Text("comments",style: TextStyles.semiBold18,),
-                                  ),
-                                  CommentsListView(model: widget.model,),
-
-
                                 ],
                               ),
-                            ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15).copyWith(bottom: 30),
-                    child: Row(
-                      mainAxisAlignment:
-                      MainAxisAlignment.spaceAround,
-                      children: [
-                        Expanded(
-                          child: CustomButton(
-                            title: Text(
-                              'Buy Now',
-                              style: TextStyles.semiBold16
-                                  .copyWith(
-                                  color: AppColors.cyan),
-                            ),
-                            onPressed: () {},
-                            color: AppColors.grey50,
-                          ),
-                        ),
-                        const SizedBox(width: 20),
-                        Expanded(
-                          child: CustomButton(
-                            title: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Add To Cart',
-                                  style: TextStyles.semiBold16,
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 15,
                                 ),
-                                const SizedBox(width: 8),
-                                Image.asset(
-                                    'assets/shopping-cart (1).png'),
-                              ],
-                            ),
-                            onPressed: () {},
-                            color: AppColors.cyan,
+                                child: Text(
+                                  widget.model.description!,
+                                  maxLines: 5,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyles.regular14.copyWith(
+                                    color: AppColors.grey150,
+                                  ),
+                                ),
+                              ),
+
+                              isSuccess
+                                  ? RatingWidget(
+                                    averageRate:
+                                        _productDetailsCubit.averageRate,
+                                    userRate:
+                                        _productDetailsCubit.userRate
+                                            .toDouble(),
+                                    productId: widget.model.productId!,
+                                  )
+                                  : SizedBox(),
+
+                              state is AddCommentLoading
+                                  ? Center(child: CircularProgressIndicator())
+                                  : CommentInputField(
+                                    controller: _controller,
+                                    hintText: 'Type your feedback',
+                                    onPressed: () async {
+                                      if (_controller.text.trim().isEmpty) {
+                                        return;
+                                      }
+                                      await _productDetailsCubit.addComment(
+                                        comment: _controller.text,
+                                        productId: widget.model.productId!,
+                                        userName: _authCubit.userModel.name,
+                                      );
+                                      _controller.clear();
+                                    },
+                                  ),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 15),
+                                child: Text(
+                                  "comments",
+                                  style: TextStyles.semiBold18,
+                                ),
+                              ),
+                              CommentsListView(model: widget.model),
+                            ],
                           ),
                         ),
                       ],
                     ),
                   ),
-
-                ],
-              );
-        }
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 15,
+                  ).copyWith(bottom: 30),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Expanded(
+                        child: CustomButton(
+                          title: Text(
+                            'Buy Now',
+                            style: TextStyles.semiBold16.copyWith(
+                              color: AppColors.cyan,
+                            ),
+                          ),
+                          onPressed: () {},
+                          color: AppColors.grey50,
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        child: CustomButton(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('Add To Cart', style: TextStyles.semiBold16),
+                              const SizedBox(width: 8),
+                              Image.asset('assets/shopping-cart (1).png'),
+                            ],
+                          ),
+                          onPressed: () {},
+                          color: AppColors.cyan,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+      },
     );
   }
 }
-
-

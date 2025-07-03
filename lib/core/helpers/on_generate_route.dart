@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quick_mart/core/network/dio_consumer.dart';
 import 'package:quick_mart/core/utils/service_locator.dart';
 import 'package:quick_mart/features/auth/presentation/manager/auth_cubit.dart';
 import 'package:quick_mart/features/cart/presentation/views/cart_view.dart';
@@ -53,13 +52,14 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case ProductDetailsView.routeName:
       final model = settings.arguments as ProductModel;
       return MaterialPageRoute(
-        builder: (context) => MultiBlocProvider(
-            providers: [
-              BlocProvider.value(value: getIt.get<ProductDetailsCubit>()),
-              BlocProvider.value(value: getIt.get<AuthCubit>()),
-            ],
-            child: ProductDetailsView(model: model),
-        ),
+        builder:
+            (context) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(value: getIt.get<ProductDetailsCubit>()),
+                BlocProvider.value(value: getIt.get<AuthCubit>()),
+              ],
+              child: ProductDetailsView(model: model),
+            ),
       );
 
     case MainView.routeName:
@@ -93,12 +93,15 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
             ),
       );
 
-    case SearchView.routeName :
-      final  products = settings.arguments as List<ProductModel> ;
-      return MaterialPageRoute(builder: (context)=>BlocProvider.value(
-    value: getIt.get<HomeCubit>(),
-  child: SearchView(products: products),
-));
+    case SearchView.routeName:
+      final products = settings.arguments as List<ProductModel>;
+      return MaterialPageRoute(
+        builder:
+            (context) => BlocProvider.value(
+              value: getIt.get<HomeCubit>(),
+              child: SearchView(products: products),
+            ),
+      );
 
     default:
       return MaterialPageRoute(builder: (context) => const Scaffold());

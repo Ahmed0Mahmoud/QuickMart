@@ -13,6 +13,9 @@ class ApiEndpoints {
   static String addComment = 'comments_table';
 
   static String search = 'products_table?select=*';
+
+  static String setFavorite = 'favorite_table?select=*';
+  static String getFavorite = 'favorite_table?select=*';
 }
 
 // class ApiKeys {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quick_mart/features/home/presentation/views/widgets/search_input_field.dart';
 
 class CustomAppBar extends StatelessWidget {
-  final bool searchIconVisible ;
+  final bool searchIconVisible;
   final String? hintText;
   final bool? isDense;
   final TextEditingController? controller;
