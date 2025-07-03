@@ -24,6 +24,7 @@ class _MainViewState extends State<MainView> {
     WishlistView(),
     ProfileView(),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

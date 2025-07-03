@@ -11,6 +11,8 @@ class ApiEndpoints {
   static String postRate = 'rates_table?select=*';
 
   static String addComment = 'comments_table';
+
+  static String search = 'products_table?select=*';
 }
 
 // class ApiKeys {
