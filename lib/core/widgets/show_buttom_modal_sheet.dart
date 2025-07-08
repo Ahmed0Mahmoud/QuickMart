@@ -4,7 +4,8 @@ import '../utils/app_colors.dart';
 import '../utils/app_text_styles.dart';
 import 'custom_button.dart';
 
-showButtomModalSheet(context) {
+showButtomModalSheet(context,{required void Function() onDeletePressed}) {
+
   showModalBottomSheet(
     context: context,
     backgroundColor: Colors.black,
@@ -27,7 +28,7 @@ showButtomModalSheet(context) {
                 'Delete (1) product',
                 style: TextStyles.regular14.copyWith(color: Colors.white),
               ),
-              onPressed: () {},
+              onPressed: onDeletePressed,
               color: AppColors.cyan,
             ),
             const SizedBox(height: 10),

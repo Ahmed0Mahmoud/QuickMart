@@ -49,7 +49,7 @@ class CartProduct extends StatelessWidget {
                       IconButton(
                         padding: EdgeInsets.zero,
                         onPressed: () {
-                          showButtomModalSheet(context);
+                          showButtomModalSheet(context, onDeletePressed: () {  });
                         },
                         icon: Image.asset('assets/trash.png'),
                       ),

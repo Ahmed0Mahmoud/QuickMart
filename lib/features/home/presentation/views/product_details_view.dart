@@ -9,6 +9,13 @@ class ProductDetailsView extends StatelessWidget {
   static const routeName = 'productDetails';
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: ProductDetailsViewBody(model: model));
+    return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+          if (!didPop) {
+            Navigator.pop(context, 'refresh');
+          }
+        },
+        child: Scaffold(body: ProductDetailsViewBody(model: model)));
   }
 }

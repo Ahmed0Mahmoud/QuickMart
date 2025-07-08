@@ -18,14 +18,20 @@ class HomeViewBody extends StatefulWidget {
   State<HomeViewBody> createState() => _HomeViewBodyState();
 }
 
-class _HomeViewBodyState extends State<HomeViewBody> {
+class _HomeViewBodyState extends State<HomeViewBody> with RouteAware  {
+  final _searchController = TextEditingController();
+  bool _isFirstBuild = true;
+  late HomeCubit cubit;
+
   @override
-  void initState() {
-    super.initState();
-    Future.microtask(() {
-      final cubit = context.read<HomeCubit>();
-      cubit.getAllProducts();
-    });
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_isFirstBuild) {
+       cubit = context.read<HomeCubit>();
+       cubit.loadFavoritesFromCache();
+       cubit.getAllProducts();
+      _isFirstBuild = false;
+    }
   }
 
   @override
@@ -34,7 +40,6 @@ class _HomeViewBodyState extends State<HomeViewBody> {
     _searchController.dispose();
   }
 
-  final _searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<HomeCubit, HomeState>(
@@ -52,7 +57,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               builder: (_) => SearchView(products: state.products),
             ),
           ).then((_) {
-            context.read<HomeCubit>()
+            cubit
               ..clearCache()
               ..getAllProducts();
           });
@@ -63,15 +68,24 @@ class _HomeViewBodyState extends State<HomeViewBody> {
             type: AnimatedSnackBarType.error,
           );
         }
-      },
-      builder: (context, state) {
-        if (state is GetAllProductsLoading || state is SearchProductsLoading) {
-          return const Center(child: CircularProgressIndicator());
+
+
+        else if (state is SetFavoriteSuccess || state is DeleteFavoriteSuccess )  {
+          {
+
+             cubit.getAllProducts();
+          }
         }
 
-        if (state is GetAllProductsSuccess) {
-          final products = state.product;
-          return Padding(
+
+
+
+
+      },
+      builder: (context, state) {
+
+        return state is GetAllProductsSuccess ?
+        Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 16,
             ).copyWith(bottom: 20),
@@ -98,21 +112,17 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                   const SizedBox(height: 34),
                   Text('Categories', style: TextStyles.bold19),
                   const SizedBox(height: 12),
-                  CategoriesListView(products: products),
+                  CategoriesListView(products: state.product),
                   const SizedBox(height: 34),
                   Text('Latest Products', style: TextStyles.bold19),
                   const SizedBox(height: 12),
-                  products.isEmpty
-                      ? const Text('No products available')
-                      : LatestProductsGridView(products: products),
+                  LatestProductsGridView(products: state.product,),
                 ],
               ),
             ),
-          );
-        }
+          ) : Center(child: CircularProgressIndicator());
+        },
 
-        return const SizedBox(); // fallback
-      },
     );
   }
 }

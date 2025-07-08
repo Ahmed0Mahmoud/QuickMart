@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quick_mart/core/utils/app_colors.dart';
 import 'package:quick_mart/features/cart/presentation/views/cart_view.dart';
 import 'package:quick_mart/features/home/presentation/views/home_view.dart';
 import 'package:quick_mart/features/profile/presentation/views/profile_view.dart';
 import 'package:quick_mart/features/wishlist/presentation/views/wishlist_view.dart';
-
 import '../../../../core/utils/app_text_styles.dart';
+import '../../../../core/utils/service_locator.dart';
+import '../manager/home_cubit/home_cubit.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
+
   static const routeName = 'main';
 
   @override
@@ -18,17 +21,29 @@ class MainView extends StatefulWidget {
 class _MainViewState extends State<MainView> {
   int currentIndex = 0;
 
-  final List<Widget> screens = [
-    HomeView(),
-    CartView(),
-    WishlistView(),
-    ProfileView(),
-  ];
+  Widget _getCurrentScreen() {
+    switch (currentIndex) {
+      case 0:
+        return HomeView();
+      case 1:
+        return CartView();
+      case 2:
+        return BlocProvider.value(
+          value: getIt<HomeCubit>(),
+          child: const WishlistView(),
+        );
+      case 3:
+        return ProfileView();
+      default:
+        return HomeView();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: screens[currentIndex],
+      body: _getCurrentScreen(),
+
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: AppColors.black,
         type: BottomNavigationBarType.fixed,
@@ -40,6 +55,10 @@ class _MainViewState extends State<MainView> {
         onTap: (index) {
           setState(() {
             currentIndex = index;
+            if (currentIndex == 2) {
+              getIt<HomeCubit>().clearCache();
+              getIt<HomeCubit>().getFavoriteProducts();
+            }
           });
         },
         items: [

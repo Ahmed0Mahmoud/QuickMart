@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quick_mart/features/home/presentation/manager/home_cubit/home_cubit.dart';
 import 'package:quick_mart/features/home/presentation/views/category_products_view.dart';
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/app_text_styles.dart';
@@ -11,14 +13,19 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<HomeCubit>();
     return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(
-          context,
-          CategoryProductsView.routeName,
-          arguments: category,
-        );
-      },
+        onTap: () async {
+          final result = await Navigator.pushNamed(
+            context,
+            CategoryProductsView.routeName,
+            arguments: category,
+          );
+
+          if (result == 'refresh') {
+            cubit.getAllProducts(); // Only refresh if "refresh" returned
+          }
+        },
       child: IntrinsicWidth(
         child: Container(
           alignment: Alignment.center,
