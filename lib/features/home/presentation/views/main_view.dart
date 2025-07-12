@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quick_mart/core/utils/app_colors.dart';
 import 'package:quick_mart/features/cart/presentation/views/cart_view.dart';
+import 'package:quick_mart/features/home/presentation/manager/ProductDetailsCubit/product_details_cubit.dart';
 import 'package:quick_mart/features/home/presentation/views/home_view.dart';
 import 'package:quick_mart/features/profile/presentation/views/profile_view.dart';
 import 'package:quick_mart/features/wishlist/presentation/views/wishlist_view.dart';
@@ -26,7 +27,10 @@ class _MainViewState extends State<MainView> {
       case 0:
         return HomeView();
       case 1:
-        return CartView();
+        return BlocProvider.value(
+          value: getIt.get<ProductDetailsCubit>(),
+          child: CartView(),
+        );
       case 2:
         return BlocProvider.value(
           value: getIt<HomeCubit>(),

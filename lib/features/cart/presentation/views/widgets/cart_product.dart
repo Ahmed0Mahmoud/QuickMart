@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quick_mart/features/home/data/models/product_model/product_model.dart';
+import 'package:quick_mart/features/home/presentation/manager/ProductDetailsCubit/product_details_cubit.dart';
 
 import '../../../../../core/utils/app_text_styles.dart';
 import '../../../../../core/widgets/custom_counter.dart';
 import '../../../../../core/widgets/show_buttom_modal_sheet.dart';
 
 class CartProduct extends StatelessWidget {
-  const CartProduct({super.key});
+  final ProductModel product;
+  const CartProduct({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +26,7 @@ class CartProduct extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               image: DecorationImage(
-                image: AssetImage('assets/Rectangle 9 (2).png'),
+                image: NetworkImage(product.imageUrl!),
                 fit: BoxFit.fill,
               ),
             ),
@@ -35,11 +39,11 @@ class CartProduct extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Loop Silicone Strong Magnetic',
+                    product.productName!,
                     style: TextStyles.medium15.copyWith(color: Colors.white),
                   ),
                   Text(
-                    '\$15.25',
+                    '\$${product.price}',
                     style: TextStyles.semiBold14.copyWith(color: Colors.white),
                   ),
                   Row(
@@ -49,7 +53,11 @@ class CartProduct extends StatelessWidget {
                       IconButton(
                         padding: EdgeInsets.zero,
                         onPressed: () {
-                          showButtomModalSheet(context, onDeletePressed: () {  });
+                          showButtomModalSheet(context, onDeletePressed: () async{
+                            Navigator.pop(context);
+                            await context.read<ProductDetailsCubit>().deleteFromCart(product: product);
+                             context.read<ProductDetailsCubit>().getTotalPrice();
+                          });
                         },
                         icon: Image.asset('assets/trash.png'),
                       ),

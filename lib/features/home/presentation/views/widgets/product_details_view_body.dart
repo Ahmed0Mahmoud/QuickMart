@@ -78,11 +78,16 @@ class _ProductDetailsViewBodyState extends State<ProductDetailsViewBody> {
             );
           }
         }
+        else if(state is AddToCartSuccess){
+          showAnimatedSnackbar(
+            context: context,
+            message: 'Done',
+            type: AnimatedSnackBarType.success,
+          );
+        }
       },
       builder: (context, state) {
-        final isSuccess = state is GetRateSuccess || state is PostRateSuccess || state is AddCommentSuccess;
-
-        return Column(
+        return state is GetRateLoading || state is GetUserDataLoading ? Center(child: CircularProgressIndicator())  : Column(
           children: [
             Expanded(
               child: SingleChildScrollView(
@@ -153,23 +158,17 @@ class _ProductDetailsViewBodyState extends State<ProductDetailsViewBody> {
                             ),
                           ),
 
-                          isSuccess
-                              ? RatingWidget(
+
+                          RatingWidget(
                             averageRate:
                             _productDetailsCubit.averageRate,
                             userRate:
                             _productDetailsCubit.userRate
                                 .toDouble(),
                             productId: widget.model.productId!,
-                          )
-                              : SizedBox(),
+                          ),
 
-                          state is AddCommentLoading
-                              ? const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 16),
-                            child: LinearProgressIndicator(),
-                          )
-                              : CommentInputField(
+                          CommentInputField(
                             controller: _controller,
                             hintText: 'Type your feedback',
                             onPressed: () async {
@@ -219,7 +218,7 @@ class _ProductDetailsViewBodyState extends State<ProductDetailsViewBody> {
                   const SizedBox(width: 20),
                   Expanded(
                     child: CustomButton(
-                      title: Row(
+                      title:Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text('Add To Cart', style: TextStyles.semiBold16),
@@ -227,7 +226,9 @@ class _ProductDetailsViewBodyState extends State<ProductDetailsViewBody> {
                           Image.asset('assets/shopping-cart (1).png'),
                         ],
                       ),
-                      onPressed: () {},
+                      onPressed: ()async {
+                        await _productDetailsCubit.addToCart(product: widget.model);
+                      },
                       color: AppColors.cyan,
                     ),
                   ),

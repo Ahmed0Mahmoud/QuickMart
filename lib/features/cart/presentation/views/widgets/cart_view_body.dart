@@ -1,16 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quick_mart/features/home/presentation/manager/ProductDetailsCubit/product_details_cubit.dart';
 
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/app_text_styles.dart';
 import '../../../../../core/widgets/custom_button.dart';
 import 'cart_product.dart';
 
-class CartViewBody extends StatelessWidget {
+class CartViewBody extends StatefulWidget {
   const CartViewBody({super.key});
 
   @override
+  State<CartViewBody> createState() => _CartViewBodyState();
+}
+
+class _CartViewBodyState extends State<CartViewBody> {
+
+  @override
+  void initState() {
+    super.initState();
+    loadCachedCartProducts();
+  }
+
+  loadCachedCartProducts(){
+    context.read<ProductDetailsCubit>().loadCartProducts();
+    context.read<ProductDetailsCubit>().getTotalPrice();
+  }
+  @override
   Widget build(BuildContext context) {
-    return Padding(
+    final cartProducts = context.watch<ProductDetailsCubit>().cartProducts;
+    final totalPrice = context.watch<ProductDetailsCubit>().totalProice;
+
+    return cartProducts.isEmpty ? Center(child: Text('The Cart Is Empty.',style: TextStyles.semiBold18,),)  :Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 16,
       ).copyWith(top: 60, bottom: 10),
@@ -27,10 +48,10 @@ class CartViewBody extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 16),
-                        child: CartProduct(),
+                        child: CartProduct(product:cartProducts[index] ,),
                       );
                     },
-                    itemCount: 2,
+                    itemCount: cartProducts.length,
                     shrinkWrap:
                         true, // Allows ListView to size itself based on content
                   ),
@@ -55,7 +76,7 @@ class CartViewBody extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '\$27.25',
+                      '\$$totalPrice',
                       style: TextStyles.regular13.copyWith(
                         color: AppColors.grey150,
                       ),
@@ -72,7 +93,7 @@ class CartViewBody extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '\$0.00',
+                      '\$30',
                       style: TextStyles.regular13.copyWith(
                         color: AppColors.grey150,
                       ),
@@ -89,7 +110,7 @@ class CartViewBody extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '\$27.25',
+                      '\$${totalPrice+30}',
                       style: TextStyles.regular13.copyWith(
                         color: AppColors.white,
                       ),
