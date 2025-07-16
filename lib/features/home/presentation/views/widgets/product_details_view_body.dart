@@ -49,6 +49,27 @@ class _ProductDetailsViewBodyState extends State<ProductDetailsViewBody> {
         iframeId: payMobIframeId, // Required: Found under Developers -> iframes
         integrationCardId: payMobIntegrationCardId, // Required: Found under Developers -> Payment Integrations -> Online Card ID
         integrationMobileWalletId: payMobIntegrationMobileWalletId, // Required: Found under Developers -> Payment Integrations -> Mobile Wallet ID
+
+      userData: UserData(
+        email: _authCubit.userModel.email,
+        name: _authCubit.userModel.name,
+      ),
+
+      style: Style(
+        primaryColor: AppColors.cyan, // Default: Colors.blue
+        scaffoldColor: AppColors.black, // Default: Colors.white
+        appBarBackgroundColor: AppColors.cyan, // Default: Colors.blue
+        appBarForegroundColor: Colors.white, // Default: Colors.white
+        textStyle: TextStyle(), // Default: TextStyle()
+        buttonStyle: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.cyan,
+          foregroundColor: AppColors.white
+        ), // Default: ElevatedButton.styleFrom()
+        circleProgressColor: AppColors.cyan, // Default: Colors.blue
+        unselectedColor: Colors.grey, // Default: Colors.grey
+      ),
+
+
     );
   }
 
