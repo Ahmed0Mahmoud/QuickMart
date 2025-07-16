@@ -1,6 +1,11 @@
+import 'dart:developer';
+
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:pay_with_paymob/pay_with_paymob.dart';
+import 'package:quick_mart/core/sensetive_data.dart';
 import 'package:quick_mart/core/utils/app_colors.dart';
 import 'package:quick_mart/core/widgets/custom_button.dart';
 import 'package:quick_mart/core/widgets/show_dialog.dart';
@@ -39,6 +44,12 @@ class _ProductDetailsViewBodyState extends State<ProductDetailsViewBody> {
       loadRates();
       getUserData();
     });
+    PaymentData.initialize(
+        apiKey: payMobApiKey, // Required: Found under Dashboard -> Settings -> Account Info -> API Key
+        iframeId: payMobIframeId, // Required: Found under Developers -> iframes
+        integrationCardId: payMobIntegrationCardId, // Required: Found under Developers -> Payment Integrations -> Online Card ID
+        integrationMobileWalletId: payMobIntegrationMobileWalletId, // Required: Found under Developers -> Payment Integrations -> Mobile Wallet ID
+    );
   }
 
 
@@ -87,8 +98,11 @@ class _ProductDetailsViewBodyState extends State<ProductDetailsViewBody> {
         }
       },
       builder: (context, state) {
-        return state is GetRateLoading || state is GetUserDataLoading ? Center(child: CircularProgressIndicator())  : Column(
-          children: [
+
+        return state is GetRateLoading || state is GetUserDataLoading ?
+        Center(child: LoadingAnimationWidget.flickr(leftDotColor: AppColors.cyan, rightDotColor: AppColors.grey100, size: 80))
+            : Column(
+                      children: [
             Expanded(
               child: SingleChildScrollView(
                 physics: BouncingScrollPhysics(),
@@ -211,7 +225,24 @@ class _ProductDetailsViewBodyState extends State<ProductDetailsViewBody> {
                           color: AppColors.cyan,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PaymentView(
+                              onPaymentSuccess: () {
+                                log('payment success');
+                              },
+                              onPaymentError: () {
+                                log('payment failure');
+                              },
+                              price: double.tryParse(widget.model.price!.replaceAll(',', '')) ?? 0.0,
+                            ),
+                          ),
+                        );
+
+
+                      },
                       color: AppColors.grey50,
                     ),
                   ),
@@ -235,8 +266,8 @@ class _ProductDetailsViewBodyState extends State<ProductDetailsViewBody> {
                 ],
               ),
             ),
-          ],
-        );
+                      ],
+                    );
       },
     );
   }

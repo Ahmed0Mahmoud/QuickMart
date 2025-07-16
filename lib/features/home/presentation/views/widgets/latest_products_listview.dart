@@ -21,7 +21,7 @@ class LatestProductsGridView extends StatelessWidget {
             padding: EdgeInsets.zero,
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: products.length,
+            itemCount: products.length < 4 ? products.length : 4,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 12,
@@ -29,8 +29,8 @@ class LatestProductsGridView extends StatelessWidget {
               childAspectRatio: 0.7,
             ),
             itemBuilder: (context, index) {
-              final product = products[index];
-              final isLoading = state is DeleteFavoriteLoading || state is SetFavoriteLoading && state.productId   == product.productId;
+              final product = products[products.length - 1 - index];
+              final isLoading = (state is DeleteFavoriteLoading) || (state is SetFavoriteLoading && state.productId == product.productId);
               return ProductCard(
                 model: product,
                 isLoading: isLoading,

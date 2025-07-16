@@ -4,9 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quick_mart/core/widgets/custom_app_bar.dart';
 import 'package:quick_mart/features/home/presentation/manager/home_cubit/home_cubit.dart';
 import 'package:quick_mart/features/home/presentation/views/search_view.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../../core/utils/app_text_styles.dart';
 import '../../../../../core/widgets/show_dialog.dart';
+import '../../../data/models/product_model/product_model.dart';
 import 'categories_listview.dart';
 import 'latest_products_listview.dart';
 import 'offers_listview.dart';
@@ -40,6 +42,7 @@ class _HomeViewBodyState extends State<HomeViewBody> with RouteAware  {
     _searchController.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<HomeCubit, HomeState>(
@@ -58,8 +61,8 @@ class _HomeViewBodyState extends State<HomeViewBody> with RouteAware  {
             ),
           ).then((_) {
             cubit
-              ..clearCache()
-              ..getAllProducts();
+
+              .getAllProducts();
           });
         } else if (state is SearchProductsFailure) {
           showAnimatedSnackbar(
@@ -67,28 +70,18 @@ class _HomeViewBodyState extends State<HomeViewBody> with RouteAware  {
             message: 'There was an error, try again',
             type: AnimatedSnackBarType.error,
           );
+        } else if (state is SetFavoriteSuccess || state is DeleteFavoriteSuccess) {
+          cubit.getAllProducts();
         }
-
-
-        else if (state is SetFavoriteSuccess || state is DeleteFavoriteSuccess )  {
-          {
-
-             cubit.getAllProducts();
-          }
-        }
-
-
-
-
-
       },
       builder: (context, state) {
+        final isLoading = state is! GetAllProductsSuccess;
+        final List<ProductModel> products = state is GetAllProductsSuccess ? state.product : [];
 
-        return state is GetAllProductsSuccess ?
-        Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-            ).copyWith(bottom: 20),
+        return Skeletonizer(
+          enabled: isLoading,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 20),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,6 +94,7 @@ class _HomeViewBodyState extends State<HomeViewBody> with RouteAware  {
                     onPressed: () async {
                       final searchText = _searchController.text.trim();
                       if (searchText.isNotEmpty) {
+                        FocusScope.of(context).unfocus();
                         await context.read<HomeCubit>().searchProduct(
                           productName: searchText,
                         );
@@ -108,21 +102,22 @@ class _HomeViewBodyState extends State<HomeViewBody> with RouteAware  {
                       }
                     },
                   ),
-                  OffersListView(models: state.product),
+                  OffersListView(models: products),
                   const SizedBox(height: 34),
                   Text('Categories', style: TextStyles.bold19),
                   const SizedBox(height: 12),
-                  CategoriesListView(products: state.product),
+                  CategoriesListView(products: products),
                   const SizedBox(height: 34),
                   Text('Latest Products', style: TextStyles.bold19),
                   const SizedBox(height: 12),
-                  LatestProductsGridView(products: state.product,),
+                  LatestProductsGridView(products: products),
                 ],
               ),
             ),
-          ) : Center(child: CircularProgressIndicator());
-        },
-
+          ),
+        );
+      },
     );
   }
+
 }
